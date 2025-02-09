@@ -1,3 +1,7 @@
+# TODO:
+# Add .env stuff, add dev and prod for properties (profiles) yml files
+# Add dockerfiles instead of just Dockerfile.dev
+
 services:
   postgres:
     image: postgres:17-alpine
@@ -45,11 +49,30 @@ services:
       context: ./backend/api-gateway
       dockerfile: Dockerfile.dev
     ports:
-      - "8080:8080"
+      - "1110:1110"
     environment:
       - EUREKA_SERVICE_URL=http://eureka-server:8761/eureka/
     volumes:
       - ./backend/api-gateway:/app
+      - ~/.m2:/root/.m2
+    command: "mvn spring-boot:run -Dspring.profiles.active=dev"
+    depends_on:
+      eureka-server:
+        condition: service_started
+    networks:
+      - localnet
+
+  auth-service:
+    container_name: dpsn_auth_service
+    build:
+      context: ./backend/auth-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - "1111:1111"
+    environment:
+      - EUREKA_SERVICE_URL=http://eureka-server:8761/eureka/
+    volumes:
+      - ./backend/auth-service:/app
       - ~/.m2:/root/.m2
     command: "mvn spring-boot:run -Dspring.profiles.active=dev"
     depends_on:
