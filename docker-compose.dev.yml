@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: dpsn_postgres
+    restart: unless-stopped
+    env_file:
+      - ./db/.env.development
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - localnet
+
+  pgweb:
+    image: sosedoff/pgweb
+    container_name: dpsn_pgweb
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      - PGWEB_DATABASE_URL=postgres://dpsn:dpsn@postgres:5432/dpsn_db?sslmode=disable
+    depends_on:
+      - postgres
+    networks:
+      - localnet
+
+  eureka-server:
+    container_name: dpsn_eureka_server
+    build:
+      context: ./backend/eureka-server
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8761:8761"
+    volumes:
+      - ./backend/eureka-server:/app
+      - ~/.m2:/root/.m2
+    command: "mvn spring-boot:run -Dspring.profiles.active=dev"
+    networks:
+      - localnet
+
+volumes:
+  db:
+
+networks:
+  localnet:
+    driver: bridge
