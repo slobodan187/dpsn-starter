@@ -4,5 +4,6 @@ public enum UserStatus {
     ACTIVE,
     PASSIVE,
     SUSPENDED,
-	BANNED
+	BANNED,
+	DELETED
 }
