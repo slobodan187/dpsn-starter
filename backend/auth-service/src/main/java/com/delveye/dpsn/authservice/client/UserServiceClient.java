@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
  * This client is used to perform various operations related to user management,
  * such as registration, token validation, login, token refresh, and logout.
  */
-@FeignClient(name = "userservice", path = "/api/v1/users")
+@FeignClient(name = "user-service", path = "/api/v1/users")
 public interface UserServiceClient {
 
 	/**

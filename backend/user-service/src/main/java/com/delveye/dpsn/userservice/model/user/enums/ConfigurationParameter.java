@@ -50,3 +50,4 @@ public enum ConfigurationParameter {
 		""");
 
 	private final String defaultValue;
+}

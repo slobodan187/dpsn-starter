@@ -19,7 +19,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 public class UserEntity extends BaseEntity {
 
 	@Id
@@ -43,10 +43,12 @@ public class UserEntity extends BaseEntity {
 
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "user_type")
 	private UserType userType;
 
 	@Builder.Default
 	@Enumerated(EnumType.STRING)
+	@Column(name = "user_status")
 	private UserStatus userStatus = UserStatus.ACTIVE;
 
 	/**
